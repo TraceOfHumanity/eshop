@@ -6,4 +6,7 @@
   .customContainer {
     @apply mx-auto container;
   }
+  .header {
+    @apply flex justify-between items-center py-2;
+  }
 }
