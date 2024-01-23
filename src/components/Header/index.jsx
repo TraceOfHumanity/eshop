@@ -22,7 +22,7 @@ export const Header = () => {
           <Nav />
           <div className="flex gap-2">
             <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            <Link to="/registration">Register</Link>
             <Link to="/order-history">My orders</Link>
             <Link to="/cart" className="flex items-center gap-2">
               Cart <FaCartShopping />
