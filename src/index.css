@@ -4,9 +4,9 @@
 
 @layer components {
   .customContainer {
-    @apply mx-auto container;
+    @apply mx-auto container px-2;
   }
   .header {
-    @apply flex justify-between items-center py-2;
+    @apply flex justify-between items-center py-2 relative;
   }
 }
