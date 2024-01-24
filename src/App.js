@@ -13,9 +13,13 @@ import { Login } from "./pages/auth/Login";
 import { Registration } from "./pages/auth/Registration";
 import { Reset } from "./pages/auth/Reset";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
+      <ToastContainer />
       <Header />
       <div className="flex-auto flex flex-col">
         <Routes>

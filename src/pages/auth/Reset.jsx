@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const Reset = () => {
+  const [email, setEmail] = useState("");
+
   return (
     <div className="customContainer flex justify-center items-center flex-auto flex-col h-full">
       <h1>Reset password</h1>

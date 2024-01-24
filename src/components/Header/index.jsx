@@ -2,15 +2,30 @@ import React, { useState } from "react";
 
 import { FaCartShopping } from "react-icons/fa6";
 import { IoIosMenu } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Nav } from "./Nav";
 import { MobileMenu } from "./MobileMenu";
 import { useDispatch } from "react-redux";
 import { setIsShowMobileMenu } from "src/redux/features/popupsSlice";
+import { signOut } from "firebase/auth";
+import { auth } from "src/firebase/firebase.config";
+import { toast } from "react-toastify";
 
 export const Header = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutUser = () => {
+    signOut(auth)
+      .then(() => {
+        toast.success("Logout success");
+        navigate("/");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
 
   return (
     <header className="bg-slate-700 text-white">
@@ -24,6 +39,9 @@ export const Header = () => {
             <Link to="/login">Login</Link>
             <Link to="/registration">Register</Link>
             <Link to="/order-history">My orders</Link>
+            <Link to="/" onClick={logoutUser}>
+              Logout
+            </Link>
             <Link to="/cart" className="flex items-center gap-2">
               Cart <FaCartShopping />
               <p>0</p>
