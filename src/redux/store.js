@@ -1,13 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
-import themeSlice from "./features/themeSlice";
-import userSlice from "./features/user";
-import popupsSlice from "./features/popupsSlice";
+import authSlice from "./features/authSlice";
+
+const rootReducer = combineReducers({
+  auth: authSlice,
+  // popups: popupsSlice.reducer,
+});
 
 export const store = configureStore({
-  reducer: {
-    theme: themeSlice,
-    user: userSlice,
-    popups: popupsSlice,
-  },
+  reducer: rootReducer,
 });

@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { FaCartShopping } from "react-icons/fa6";
-import { IoIosMenu } from "react-icons/io";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { auth } from "src/firebase/firebase.config";
+import {
+  REMOVE_ACTIVE_USER,
+  SET_ACTIVE_USER,
+} from "src/redux/features/authSlice";
 
 import { Nav } from "./Nav";
-import { MobileMenu } from "./MobileMenu";
-import { useDispatch } from "react-redux";
-import { setIsShowMobileMenu } from "src/redux/features/popupsSlice";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "src/firebase/firebase.config";
-import { toast } from "react-toastify";
 
 export const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [displayName, setDisplayName] = useState("");
-  
 
   const logoutUser = () => {
     signOut(auth)
@@ -33,14 +33,28 @@ export const Header = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const uid = user.uid;
-        console.log(user.displayName)
-        setDisplayName(user.displayName)
+        if (user.displayName === null) {
+          const u1 = user.email.split("@")[0];
+          const uName = u1.charAt(0).toUpperCase() + u1.slice(1);
+          // console.log(uName);
+          setDisplayName(uName);
+        } else {
+          setDisplayName(user.displayName);
+        }
+
+        dispatch(
+          SET_ACTIVE_USER({
+            email: user.email,
+            userName: user.displayName ? user.displayName : displayName,
+            userId: user.uid,
+          })
+        );
       } else {
-        setDisplayName("")
+        setDisplayName("");
+        dispatch(REMOVE_ACTIVE_USER());
       }
     });
-  }, []);
+  }, [dispatch, displayName]);
 
   return (
     <header className="bg-slate-700 text-white">
@@ -52,9 +66,7 @@ export const Header = () => {
           <Nav />
           <div className="flex gap-2">
             <Link to="/login">Login</Link>
-            <a href="#">
-              Hi, {displayName}
-            </a>
+            <a href="#home">Hi, {displayName}</a>
             <Link to="/registration">Register</Link>
             <Link to="/order-history">My orders</Link>
             <Link to="/" onClick={logoutUser}>
@@ -66,15 +78,15 @@ export const Header = () => {
             </Link>
           </div>
         </div>
-        <button
+        {/* <button
           className="sm:hidden"
           onClick={() => {
-            dispatch(setIsShowMobileMenu(true));
+            // dispatch(setIsShowMobileMenu(true));
           }}
         >
           <IoIosMenu />
-        </button>
-        <MobileMenu />
+        </button> */}
+        {/* <MobileMenu /> */}
       </div>
     </header>
   );
