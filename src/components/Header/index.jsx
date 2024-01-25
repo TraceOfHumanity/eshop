@@ -11,6 +11,7 @@ import {
   SET_ACTIVE_USER,
 } from "src/redux/features/authSlice";
 
+import { ShowOnLogin, ShowOnLogout } from "../HiddenLink";
 import { Nav } from "./Nav";
 
 export const Header = () => {
@@ -65,17 +66,21 @@ export const Header = () => {
         <div className="gap-5 hidden sm:flex">
           <Nav />
           <div className="flex gap-2">
-            <Link to="/login">Login</Link>
-            <a href="#home">Hi, {displayName}</a>
-            <Link to="/registration">Register</Link>
-            <Link to="/order-history">My orders</Link>
-            <Link to="/" onClick={logoutUser}>
-              Logout
-            </Link>
-            <Link to="/cart" className="flex items-center gap-2">
-              Cart <FaCartShopping />
-              <p>0</p>
-            </Link>
+            <ShowOnLogout>
+              <Link to="/login">Login</Link>
+              <Link to="/registration">Register</Link>
+            </ShowOnLogout>
+            <ShowOnLogin>
+              <a href="#home">Hi, {displayName}</a>
+              <Link to="/order-history">My orders</Link>
+              <Link to="/" onClick={logoutUser}>
+                Logout
+              </Link>
+              <Link to="/cart" className="flex items-center gap-2">
+                Cart <FaCartShopping />
+                <p>0</p>
+              </Link>
+            </ShowOnLogin>
           </div>
         </div>
         {/* <button
