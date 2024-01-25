@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { FaCartShopping } from "react-icons/fa6";
 import { IoIosMenu } from "react-icons/io";
@@ -8,13 +8,16 @@ import { Nav } from "./Nav";
 import { MobileMenu } from "./MobileMenu";
 import { useDispatch } from "react-redux";
 import { setIsShowMobileMenu } from "src/redux/features/popupsSlice";
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "src/firebase/firebase.config";
 import { toast } from "react-toastify";
 
 export const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [displayName, setDisplayName] = useState("");
+  
 
   const logoutUser = () => {
     signOut(auth)
@@ -27,6 +30,18 @@ export const Header = () => {
       });
   };
 
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        console.log(user.displayName)
+        setDisplayName(user.displayName)
+      } else {
+        setDisplayName("")
+      }
+    });
+  }, []);
+
   return (
     <header className="bg-slate-700 text-white">
       <div className="customContainer header">
@@ -37,6 +52,9 @@ export const Header = () => {
           <Nav />
           <div className="flex gap-2">
             <Link to="/login">Login</Link>
+            <a href="#">
+              Hi, {displayName}
+            </a>
             <Link to="/registration">Register</Link>
             <Link to="/order-history">My orders</Link>
             <Link to="/" onClick={logoutUser}>
